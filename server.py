@@ -26,5 +26,5 @@ class MyHTTPRequestHandler (http.server.BaseHTTPRequestHandler) :
         with open("upload/{}".format(time.time_ns()), 'wb') as f :
             f.write (fml)
 
-httpd = http.server.HTTPServer (('192.168.1.2', 8000), MyHTTPRequestHandler) # change the ip address
+httpd = http.server.HTTPServer (('0.0.0.0', 8000), MyHTTPRequestHandler)
 httpd.serve_forever ()
