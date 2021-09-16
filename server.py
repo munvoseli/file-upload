@@ -15,6 +15,8 @@ class MyHTTPRequestHandler (http.server.BaseHTTPRequestHandler) :
         self.send_response (200)
         self.send_header ('Content-type', 'text/html')
         self.end_headers()
+        f = open ("index.html", "rb")
+        self.wfile.write (f.read ())
         header = self.headers.get('content-type')
         # print (self.headers.keys ())
         # print (header)
@@ -31,7 +33,6 @@ class MyHTTPRequestHandler (http.server.BaseHTTPRequestHandler) :
         # because cgi.parse_multipart doesn't do it
         stri = self.rfile.peek()
         print (stri)
-        # name_getting_boundary = "--" + pdict ['boundary']
         name_getting_boundary = bytes(pdict['boundary'], "utf-8")
         # filenames does not contain file names yet
         # but we're getting there
