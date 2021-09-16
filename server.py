@@ -1,3 +1,5 @@
+#!/bin/python3
+
 import http.server
 import cgi
 import time
@@ -29,20 +31,23 @@ class MyHTTPRequestHandler (http.server.BaseHTTPRequestHandler) :
         # because cgi.parse_multipart doesn't do it
         stri = self.rfile.peek()
         print (stri)
-        name_getting_boundary = "--" + pdict ['boundary']
-        name_getting_boundary = bytes(name_getting_boundary, "utf-8")
+        # name_getting_boundary = "--" + pdict ['boundary']
+        name_getting_boundary = bytes(pdict['boundary'], "utf-8")
         # filenames does not contain file names yet
         # but we're getting there
-        filenames = stri.split(name_getting_boundary)
-        filenames.remove(b'')
-        filenames.remove(b'--\r\n')
-        for i, filebytes in enumerate(filenames):
-            filestring = filebytes.decode("utf-8")
-            name_beginning = filestring.find('filename') + 10
-            name_end = filestring.find('"', name_beginning)
+        postparts = stri.split(name_getting_boundary)
+        filenames = []
+        print (postparts)
+        for filebytes in postparts:
+            name_beginning = filebytes.find(b'filename')
+            print(name_beginning)
+            if (name_beginning == -1):
+                continue
+            name_beginning += 10
+            name_end = filebytes.find(b'"', name_beginning)
             filename = filebytes[name_beginning:name_end].decode("utf-8")
-            # print(filename)
-            filenames[i] = filename
+            print(filename)
+            filenames.append(filename)
         print (filenames)
 
         # get the file contents and save each file
